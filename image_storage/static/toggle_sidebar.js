@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', event => {
     var breakpoint;
     sidebarWrapper = document.body.querySelector('#sidebar-wrapper');
     contentWrapper = document.body.querySelector('#content-wrapper');
+    toggle = document.querySelector('#sidebarToggle');
 
     // Toggle the side navigation
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
@@ -25,6 +26,11 @@ window.addEventListener('DOMContentLoaded', event => {
         sidebarToggle.addEventListener('click', event => {
             event.preventDefault();
             document.body.classList.toggle('sb-sidenav-toggled');
+            if (toggle.classList.contains('bi-arrow-bar-left')) {
+                toggle.classList.replace('bi-arrow-bar-left', 'bi-arrow-bar-right');
+            } else {
+                toggle.classList.replace('bi-arrow-bar-right', 'bi-arrow-bar-left');
+            }
             localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));   
         });
     };
