@@ -9,8 +9,6 @@
 
 window.addEventListener('DOMContentLoaded', event => {
 
-    // Setup the breakpoint variable
-    var breakpoint;
     sidebarWrapper = document.body.querySelector('#sidebar-wrapper');
     contentWrapper = document.body.querySelector('#content-wrapper');
     toggle = document.querySelector('#sidebarToggle');

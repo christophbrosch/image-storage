@@ -2,18 +2,9 @@
 {% load static %}
 
 {% block content %} 
-<body class="sb-sidenav-toggled">
-    <div class="d-flex row">
-        {% include 'dashboard/_sidebar.html' %}
-        <div id="content-wrapper" class="col-sm">
-            {% include 'dashboard/_navbar.html' %}
-            <!-- Page content-->
-            <div class="container-fluid">
-                <h1 class="mt-4">Simple Sidebar</h1>
-            </div>
-        </div>
-        <script src="{% static 'dashboard.js' %}"></script>
-        <script src="{% static 'toggle_sidebar.js' %}"></script>
+<body>
+    <div id="root">
     </div>
-  </body>       
+    <script src="{% static 'dashboard.js' %}"></script>
+</body>       
 {% endblock %}
