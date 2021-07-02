@@ -10,26 +10,28 @@ function Navigation(props){
   const [open, setOpen] = useState(true);
   const [phoneMode, setPhoneMode] = useState(false);
 
-  useEffect(() => {
+
+  const handleResize = function() {
     if (window.outerWidth <= 992) {
       setPhoneMode(true);
     } else {
       setPhoneMode(false);
     };
-
+  }
+  useEffect(() => {
+    handleResize();
     window.addEventListener('resize', () => {
-      if (window.outerWidth <= 992) {
-        setPhoneMode(true);
-      } else {
-        setPhoneMode(false);
-      };
+      handleResize();
     });
-  });
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+  }, []);
 
   return (
     <body className={open ? "sb-sidenav-toggled": ""}>
       <div className="d-flex row">
-          <Sidebar></Sidebar>
+          <Sidebar open={open} phoneMode={phoneMode}></Sidebar>
           <div id="content-wrapper" className="col-sm">
               <Navbar open={open} phoneMode={phoneMode} onToggleClick={() => setOpen(!open)}></Navbar>
           </div>

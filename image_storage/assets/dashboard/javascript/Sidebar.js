@@ -1,18 +1,19 @@
 import React from 'react';
+import ListItem from './ListItem';
 
-const Sidebar = function() {
+const Sidebar = function(props) {
     return (
-        <div className="border-right bg-white col-sm-12 col-lg-3 col-xl-2" id="sidebar-wrapper">
+        <div className={(props.phoneMode ? "phone-mode ": "desktop-mode ") + "border-right bg-white col-sm-12 col-lg-3 col-xl-2"} id="sidebar-wrapper">
             <div className="list-group sidebar-heading border-bottom">
-                Start Bootstrap
+                {props.open || props.phoneMode ?
+                <span>Start Bootstrap</span>
+                :
+                <span></span>
+                }
             </div>
             <div className="list-group list-group-flush">
-                <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a>
-                <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Shortcuts</a>
-                <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Overview</a>
-                <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>
-                <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>
-                <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>
+                <ListItem icon="bi bi-bootstrap" innerHTML="Dashboard" open={props.open} phoneMode={props.phoneMode} url={URLS.DASHBOARD}></ListItem>
+                <ListItem icon="bi bi-app" innerHTML="About" open={props.open} phoneMode={props.phoneMode} url={URLS.ABOUT}></ListItem>
             </div>
         </div>
     )

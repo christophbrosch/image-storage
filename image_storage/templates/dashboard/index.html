@@ -2,6 +2,12 @@
 {% load static %}
 
 {% block content %} 
+<script>
+    const URLS = {
+        DASHBOARD: "{% url 'dashboard:index' %}",
+        ABOUT: "{% url 'dashboard:about' %}",
+    };
+</script>
 <body>
     <div id="root">
     </div>

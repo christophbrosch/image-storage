@@ -27,7 +27,7 @@
   @media (min-width: 992px) {
   
     #sidebar-wrapper {
-      margin-left: -25%;
+      margin-left: -18%;
       transition: margin 0.25s ease-out;
     }
   
@@ -48,9 +48,8 @@
   
   @media (min-width: 1200px) {
   
-    #sidebar-wrapper {
-      margin-left: -16.666667%;
+    #sidebar-wrapper{
+      margin-left: -12.666667%;
       transition: margin 0.25s ease-out;
     }
-  
   }
