@@ -2,10 +2,6 @@
     display:block !important; 
   }
   
-  #wrapper {
-    overflow-x: hidden;
-  }
-  
   #sidebar-wrapper {
     margin-top: -25rem;
     transition: margin 0.25s ease-out;
@@ -27,29 +23,8 @@
   @media (min-width: 992px) {
   
     #sidebar-wrapper {
-      margin-left: -18%;
-      transition: margin 0.25s ease-out;
-    }
-  
-    body.sb-sidenav-toggled #sidebar-wrapper {
-      margin-left: 0;
-    }
-  
-    #sidebar-wrapper {
+      transition: max-width 0.25s ease-out;
       min-height: 100vh;
       margin-top: 0;
-    }
-  
-    #page-content-wrapper {
-      min-width: 0;
-      width: 100%;
-    }
-  }
-  
-  @media (min-width: 1200px) {
-  
-    #sidebar-wrapper{
-      margin-left: -12.666667%;
-      transition: margin 0.25s ease-out;
     }
   }

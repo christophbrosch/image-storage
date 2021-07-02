@@ -8,10 +8,12 @@ const Navbar = function(props) {
                   <span className="navbar-toggler-icon"></span>
                 </button>
                 :
-                <i onClick={() => props.onToggleClick()} className={props.open ? "bi bi-arrow-bar-left": "bi bi-arrow-bar-right"}></i>
+                <span onClick={() => props.onToggleClick()} className={props.open ? "bi bi-arrow-bar-left": "bi bi-arrow-bar-right"}>
+                </span>
                 }
-                <p> Profil </p>
+                <p className="text-white"> Invisible! </p>
             </div>
+            
         </nav>
     )
 }

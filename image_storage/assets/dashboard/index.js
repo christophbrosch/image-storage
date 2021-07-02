@@ -29,14 +29,12 @@ function Navigation(props){
   }, []);
 
   return (
-    <body className={open ? "sb-sidenav-toggled": ""}>
-      <div className="d-flex row">
-          <Sidebar open={open} phoneMode={phoneMode}></Sidebar>
-          <div id="content-wrapper" className="col-sm">
-              <Navbar open={open} phoneMode={phoneMode} onToggleClick={() => setOpen(!open)}></Navbar>
-          </div>
-      </div>
-    </body>  
+    <div className="d-flex row no-gutters">
+        <Sidebar open={open} phoneMode={phoneMode}></Sidebar>
+        <div id="content-wrapper" className="col-sm">
+            <Navbar open={open} phoneMode={phoneMode} onToggleClick={() => setOpen(!open)}></Navbar>
+        </div>
+    </div>
   )
 };
 

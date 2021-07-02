@@ -3,12 +3,12 @@ import ListItem from './ListItem';
 
 const Sidebar = function(props) {
     return (
-        <div className={(props.phoneMode ? "phone-mode ": "desktop-mode ") + "border-right bg-white col-sm-12 col-lg-3 col-xl-2"} id="sidebar-wrapper">
+        <div className={(props.open && !props.phoneMode ? "col-lg-2 ": "col-lg-1 ") + "border-right bg-white col-md-12"} id="sidebar-wrapper">
             <div className="list-group sidebar-heading border-bottom">
                 {props.open || props.phoneMode ?
                 <span>Start Bootstrap</span>
                 :
-                <span></span>
+                <span className="text-white"> X </span>
                 }
             </div>
             <div className="list-group list-group-flush">
