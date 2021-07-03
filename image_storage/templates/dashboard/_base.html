@@ -1,20 +1,24 @@
 {% load static %}
 
 {# Load the tag library #}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
+{% bootstrap_javascript %}
 
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="{% static 'colors.css' %}">
+    <link rel="stylesheet" href="{% static 'custom_bootstrap.css' %}">
+    {% block css %} {% endblock %}
 </head>
-{% block content %} {% endblock %}
+{% block _content %} {% endblock %}
 </html>
