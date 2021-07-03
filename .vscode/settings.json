@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/rahon/.local/share/virtualenvs/image_storage-ArNWUUic/bin/python"
+    "python.pythonPath": "/home/rahon/.local/share/virtualenvs/image_storage-ArNWUUic/bin/python",
+    "git.ignoreLimitWarning": true
 }
