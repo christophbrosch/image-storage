@@ -2,8 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    dashboard: './assets/dashboard/index.js',
-    users: './assets/users/index.js'
+    dataset: './assets/dataset/index.js'
   },
   output: {
     filename: '[name].js',  // output bundle file name

@@ -1,0 +1,24 @@
+{% extends 'dashboard/index.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+    <br></br>
+    <div class="row">
+        <div id="image-list" class="col-10"> Hi </div>
+    </div> 
+    <div class="row">
+        <div id="upload-tile" class="card col-md-12 col-lg-6"> 
+            <div class="card-body">
+                <h5 class="card-header">Neue Produktbilder</h5>
+                <label for="formFileMultiple" class="form-label card-text py-2">Wähle mehrere Bilder aus die du hochladen möchtest</label>
+                <form enctype="multipart/form-data" class="form-group" action="" method="post">
+                    {% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% bootstrap_button type="reset" content="Zurücksetzen" %}
+                    {% bootstrap_button type="submit" content="Hochladen" %}
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

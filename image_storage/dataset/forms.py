@@ -1,8 +1,7 @@
-from django.forms import ModelForm
+from django import forms
+from django.forms import widgets
 
 from .models import Dataset
 
-class CreateForm(ModelForm):
-    class Meta:
-        model = Dataset
-        fields = ['name']
+class ImageUploadForm(forms.Form):
+    file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
