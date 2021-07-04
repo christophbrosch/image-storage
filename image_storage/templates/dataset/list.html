@@ -2,7 +2,6 @@
 
 {% block content %}
     <br></br>
-    {% for dataset in datasets %}
-        {{ dataset }}
-    {% endfor %}
+    <!-- Making datasets variable available in the DOM -->
+    {{ datasets|json_script:'datasets'}}
 {% endblock %}

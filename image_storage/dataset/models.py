@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Dataset(models.Model):
     name = models.CharField(max_length=128)
-    owner = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, null=True, on_delete=models.CASCADE, db_column='owner')
 
 class Image(models.Model):
     dataset = models.OneToOneField(Dataset, on_delete=models.CASCADE)

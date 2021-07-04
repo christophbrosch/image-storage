@@ -1,3 +1,5 @@
+import json
+
 from django.urls import reverse
 from django.db.models.query import QuerySet
 
@@ -13,8 +15,16 @@ class ListView(LoginRequiredMixin, ListView):
     context_object_name = 'datasets'
 
     def get_queryset(self) -> QuerySet[Dataset]:
-        queryset = super().get_queryset()
-        return queryset.filter(owner=self.request.user)
+        """Only return datasets where user is owneer"""
+        # queryset = super().get_queryset()
+        # return queryset.filter(owner=self.request.user)
+        return super().get_queryset()
+
+    def get_context_data(self, **kwargs):
+        """Turn query into JSON"""
+        context = super().get_context_data(**kwargs)
+        context['datasets'] = [dataset for dataset in context['datasets'].values()]
+        return context
 
 # Create your views here.
 class CreateView(LoginRequiredMixin, CreateView):
@@ -23,7 +33,7 @@ class CreateView(LoginRequiredMixin, CreateView):
     template_name = 'dataset/create.html'
 
     def get_success_url(self) -> str:
-        """ Add owner to newly created dataset object """
+        """Add owner to newly created dataset object"""
         print(dir(self))
         object = self.object
         object.owner = self.request.user
