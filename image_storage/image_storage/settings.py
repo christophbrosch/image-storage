@@ -142,7 +142,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_ACCESS_KEY_ID = 'AKIAR7VPU42LWBOHJFE3'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'image-storage.dev.bucket'
-

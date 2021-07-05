@@ -4,19 +4,44 @@
 {% block content %}
     <br></br>
     <div class="row">
-        <div id="image-list" class="col-10"> Hi </div>
+        <div id="image-list" class="card p-2">
+            <h4 class="card-header"> Bilder </h4> 
+            <div class"row card-body">
+             {% for image in images %}
+                <img src="https://s3.eu-central-1.amazonaws.com/image-storage.dev.bucket/{{image.path}}" class="col-3"/>
+            {% endfor %}
+            </div>
+        </div>
     </div> 
-    <div class="row">
+    <div class="row py-2">
         <div id="upload-tile" class="card col-md-12 col-lg-6"> 
             <div class="card-body">
-                <h5 class="card-header">Neue Produktbilder</h5>
-                <label for="formFileMultiple" class="form-label card-text py-2">Wähle mehrere Bilder aus die du hochladen möchtest</label>
+                <h5 class="card-header"> Bilder hinzufügen </h5>
+                <label for="formFileMultiple" class="form-label card-text py-2"> Wähle mehrere Bilder aus die du hochladen möchtest </label>
                 <form enctype="multipart/form-data" class="form-group" action="" method="post">
                     {% csrf_token %}
                     {% bootstrap_form form %}
                     {% bootstrap_button type="reset" content="Zurücksetzen" %}
                     {% bootstrap_button type="submit" content="Hochladen" %}
                 </form>
+            </div>
+        </div>
+        <div id="upload-tile" class="card col-md-12 col-lg-6"> 
+            <div class="card-body">
+                <h5 class="card-header"> Transaktionen </h5>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="image-tab" data-bs-toggle="tab" data-bs-target="#image" type="button" role="tab" aria-controls="image" aria-selected="true">Bild</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="annotation-tab" data-bs-toggle="tab" data-bs-target="#annotation" type="button" role="tab" aria-controls="annotation" aria-selected="false">Annotation</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="image" role="tabpanel" aria-labelledby="image-tab"> Bild Transaktionen </div>
+                <div class="tab-pane fade" id="annotation" role="tabpanel" aria-labelledby="annotation-tab"> Annotations Transaktionen </div>
+</div>
+
             </div>
         </div>
     </div>

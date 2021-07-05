@@ -8,4 +8,5 @@ class Dataset(models.Model):
     description = models.CharField(max_length=64, default='None')
 
 class Image(models.Model):
-    dataset = models.OneToOneField(Dataset, on_delete=models.CASCADE)
+    path = models.CharField(max_length=255)
+    dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)

@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import View, FormView, ListView, DetailView, CreateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 from django.http import HttpResponseRedirect
-
+from django.core.files.storage import default_storage
+from django.contrib import messages
 from .models import Dataset, Image
 from .forms import ImageUploadForm
 
@@ -42,6 +43,7 @@ class DatasetDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = ImageUploadForm()
+        context['images'] = Image.objects.filter(dataset=self.kwargs['pk'])
         return context
     
 class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
@@ -49,12 +51,25 @@ class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
     form_class = ImageUploadForm
     model = Dataset
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         files = request.FILES.getlist('file_field')
         if form.is_valid():
+            for file in files:
+                try:
+                    path = default_storage.save(file.name, file)
+                    messages.add_message(request, messages.INFO, file.name + ' erfolgreich hochgeladen.')
+                except:
+                    messages.add_message(request, messages.WARNING, file.name + ' fehler beim upload aufgetreten.')
+                else:
+                    try:
+                        dataset = Dataset.objects.get(pk=pk)
+                    except Dataset.DoesNotExist:
+                        pass
+                    else:
+                        Image.objects.create(path = path, dataset = dataset)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)

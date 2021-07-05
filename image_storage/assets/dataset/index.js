@@ -10,25 +10,26 @@ class FilterableDatasetList extends React.Component {
     constructor() {
         super();
         this.state = {datasets: JSON.parse(document.getElementById('datasets').textContent), name: '', ownerId: -1, username_mapping: {}}
-        
+    };
+
+    componentDidMount = () => {
         // List of unique users
         let unique_user = [... new Set(this.state.datasets.map(dataset => dataset.owner_id))];
-        
+
         // Fetch the username for each unique user and store it in state
         unique_user.map(user => {
-            console.log(user);
             this.fetchUsername(user).then(
                 data => { this.setState((state) => {
                     return state['username_mapping'][user] = data.username;
                 })}
-            )
-        })
-    }
+            );
+        }); 
+    };
 
     fetchUsername = (id) => {
         return fetch(`http://localhost:8000/api/user/${id}/`)
         .then(res => res.json())
-    }
+    };
 
     handleChange = ((e) => {
         this.setState((state) => {
@@ -77,7 +78,6 @@ class FilterableDatasetList extends React.Component {
                 </div>
             </div>
         )};
-    
 };
 
 ReactDOM.render(
