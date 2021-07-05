@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'rest_framework',
     'django_bootstrap5',
     'user',
@@ -136,3 +137,12 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# File Storage
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = 'AKIAR7VPU42LWBOHJFE3'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'image-storage.dev.bucket'
+
