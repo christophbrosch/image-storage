@@ -1,17 +1,12 @@
 {% extends 'dashboard/index.html' %}
+{% load static %}
 {% load django_bootstrap5 %}
 
 {% block content %}
     <br></br>
     <div class="row">
-        <div id="image-list" class="card p-2">
-            <h4 class="card-header"> Bilder </h4> 
-            <div class"row card-body">
-             {% for image in images %}
-                <img src="https://s3.eu-central-1.amazonaws.com/image-storage.dev.bucket/{{image.path}}" class="col-3"/>
-            {% endfor %}
-            </div>
-        </div>
+        {% comment %} React is doing its magic here {% endcomment %}
+        <div id="root"></div>
     </div> 
     <div class="row py-2">
         <div id="upload-tile" class="card col-md-12 col-lg-6"> 
@@ -40,10 +35,11 @@
                 <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="image" role="tabpanel" aria-labelledby="image-tab"> Bild Transaktionen </div>
                 <div class="tab-pane fade" id="annotation" role="tabpanel" aria-labelledby="annotation-tab"> Annotations Transaktionen </div>
-</div>
-
             </div>
         </div>
     </div>
-
 {% endblock %}
+
+{% block javascript %} 
+<script src="{% static 'image.js' %}"></script>
+{% endblock javascript %}

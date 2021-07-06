@@ -14,6 +14,7 @@ django-stubs = "*"
 django-storages = "*"
 boto3 = "*"
 python-dotenv = "*"
+pillow = "*"
 
 [dev-packages]
 

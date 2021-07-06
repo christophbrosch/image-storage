@@ -1,4 +1,5 @@
-import json
+import traceback
+
 from django.http.response import JsonResponse
 
 from django.urls import reverse, reverse_lazy
@@ -43,7 +44,6 @@ class DatasetDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form"] = ImageUploadForm()
-        context['images'] = Image.objects.filter(dataset=self.kwargs['pk'])
         return context
     
 class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
@@ -59,18 +59,18 @@ class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
         if form.is_valid():
             for file in files:
                 try:
-                    path = default_storage.save(file.name, file)
-                    messages.add_message(request, messages.INFO, file.name + ' erfolgreich hochgeladen.')
-                except Exception as e:
-                    print(e)
-                    messages.add_message(request, messages.WARNING, file.name + ' fehler beim upload aufgetreten.')
+                    dataset = Dataset.objects.get(pk=pk)
+                except Dataset.DoesNotExist:
+                    pass
                 else:
                     try:
-                        dataset = Dataset.objects.get(pk=pk)
-                    except Dataset.DoesNotExist:
-                        pass
+                        Image.objects.create(file = file, dataset = dataset)
+                    except Exception as e:
+                        # TODO: Logging
+                        traceback.print_exc()                    
+                        messages.add_message(request, messages.WARNING, file.name + ' fehler beim upload aufgetreten.')
                     else:
-                        Image.objects.create(path = path, dataset = dataset)
+                        messages.add_message(request, messages.INFO, file.name + ' erfolgreich hochgeladen.')
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
