@@ -11,6 +11,9 @@ pip = "*"
 install = "*"
 django-bootstrap5 = "*"
 django-stubs = "*"
+django-storages = "*"
+boto3 = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

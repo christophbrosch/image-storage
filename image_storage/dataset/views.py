@@ -61,7 +61,8 @@ class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
                 try:
                     path = default_storage.save(file.name, file)
                     messages.add_message(request, messages.INFO, file.name + ' erfolgreich hochgeladen.')
-                except:
+                except Exception as e:
+                    print(e)
                     messages.add_message(request, messages.WARNING, file.name + ' fehler beim upload aufgetreten.')
                 else:
                     try:
