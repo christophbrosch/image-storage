@@ -11,7 +11,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.http import HttpResponseRedirect
 from django.core.files.storage import default_storage
 from django.contrib import messages
-from .models import Dataset, Image
+from .models import Dataset, Image, ImageTransaction, Transaction
 from .forms import ImageUploadForm
 
 
@@ -43,7 +43,10 @@ class DatasetDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = ImageUploadForm()
+        context['form'] = ImageUploadForm()
+        context['transactions'] = ImageTransaction.objects.filter(dataset__id=self.kwargs['pk'])
+        context['pk'] = self.kwargs['pk']
+        context['urls'] = {'image_base': 'https://s3.eu-central-1.amazonaws.com/image-storage.dev.bucket/'}
         return context
     
 class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
@@ -57,20 +60,27 @@ class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
         form = self.get_form(form_class)
         files = request.FILES.getlist('file_field')
         if form.is_valid():
-            for file in files:
+            try:
+                dataset = Dataset.objects.get(pk = pk)
+            except Dataset.DoesNotExist:
+                messages.add_message('Kritischer Fehler')
+            else:
                 try:
-                    dataset = Dataset.objects.get(pk=pk)
-                except Dataset.DoesNotExist:
-                    pass
+                    transaction = ImageTransaction.objects.create(dataset = dataset)
+                except:
+                    messages.add_message('Kritischer Fehler')
                 else:
-                    try:
-                        Image.objects.create(file = file, dataset = dataset)
-                    except Exception as e:
-                        # TODO: Logging
-                        traceback.print_exc()                    
-                        messages.add_message(request, messages.WARNING, file.name + ' fehler beim upload aufgetreten.')
-                    else:
-                        messages.add_message(request, messages.INFO, file.name + ' erfolgreich hochgeladen.')
+                    for file in files:
+                        try:
+                            image = Image.objects.create(file = file, dataset = dataset)
+                        except Exception as e:
+                            # TODO: Logging
+                            messages.add_message(request, messages.WARNING, file.name + ' fehler beim upload aufgetreten.')
+                        else:
+                            transaction.images.add(image)
+                            messages.add_message(request, messages.INFO, file.name + ' erfolgreich hochgeladen.')
+
+                    transaction.save()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
