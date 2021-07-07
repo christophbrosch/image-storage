@@ -44,9 +44,12 @@ INSTALLED_APPS = [
     'storages',
     'rest_framework',
     'django_bootstrap5',
-    'user',
+    'django_tables2',
+    'users',
     'dashboard',
-    'dataset',
+    'datasets',
+    'images',
+    'transactions',
 ]
 
 MIDDLEWARE = [
@@ -109,9 +112,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_URL = '/user/login/'
+LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
-LOGOUT_REDIRECT_URL = '/user/login/'
+LOGOUT_REDIRECT_URL = '/users/login/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
