@@ -4,8 +4,8 @@
 
 {% block content %}
     <br></br>
-    {% comment %} React is doing its magic here {% endcomment %}
-    <div id="root"></div>
+    <div>
+    </div>
     <div class="row py-2">
         <div id="upload-tile" class="card col-md-12 col-lg-6"> 
             <div class="card-body">
@@ -36,11 +36,4 @@
             </div>
         </div>
     </div>
-    
 {% endblock %}
-
-{% block javascript %}
-    {{ pk|json_script:'pk'}} 
-    {{ urls|json_script:'urls'}} 
-    <script src="{% static 'image.js' %}"></script>
-{% endblock javascript %}
