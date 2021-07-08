@@ -1,12 +1,14 @@
-{% extends 'dashboard/index.html' %}
+{% extends 'base.html' %}
 {% load static %}
+
+{% block javascript %}
+    {{ block.super }}
+    <!-- Making datasets variable available in the DOM -->
+    <script src="{% static 'dataset.js' %}" defer></script>
+{% endblock javascript %}
 
 {% block content %}
     <br></br>
     <div id="root"></div>
-
-    <!-- Making datasets variable available in the DOM -->
     {{ datasets|json_script:'datasets'}}
-    
-    <script src="{% static 'dataset.js' %}"></script>
 {% endblock %}

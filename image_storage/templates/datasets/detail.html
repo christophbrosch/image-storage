@@ -1,9 +1,10 @@
-{% extends 'dashboard/index.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load django_bootstrap5 %}
 {% load django_tables2 %}
 
 {% block css %} 
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'datasets-detail.css' %}">
 {% endblock css %}
 
