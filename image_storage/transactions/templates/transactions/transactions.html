@@ -1,0 +1,8 @@
+{% load django_tables2 %}
+<div id="parent-div" class="tab-pane fade show active" id="image" role="tabpanel" aria-labelledby="image-tab"> 
+    
+    {% render_table table %}
+    {% for page in pages %}
+        <a hx-get="{% url 'datasets:transactions-page' pk page %}" hx-target="#parent-div" hx-swap="outerHTML"> {{ page }} </a>
+    {% endfor %}
+</div>

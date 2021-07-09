@@ -3,6 +3,8 @@
 {% load django_bootstrap5 %}
 {% load django_tables2 %}
 
+{% load render_image %}
+
 {% block css %} 
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'datasets-detail.css' %}">
@@ -10,20 +12,23 @@
 
 {% block content %}
     <br></br>
-    <div>
+    <div x-data="{ images: JSON.parse(document.querySelector('#images').text), detail_url: '123' };">
         <div class="card">
            <h3 class="card-header"> Bilder </h3>
            <div class="card-body row">    
-            {% for image in images  %}
-                <div x-data="{ hover: false }" @mouseover="hover = true" @mouseleave="hover = false" class="position-relative col-sm-12 col-md-6 col-lg-4 col-xl-2 p-1">
-                    <img  style="max-width: 100%" src="https://s3.eu-central-1.amazonaws.com/image-storage.dev.bucket/{{image.thumbnail_path}}" />
-                    <div x-show="hover" class="position-absolute image-popover">
-                    </div>   
-                </div>
-            {% endfor %}
+                <template x-for="image in images">
+                    <div x-data="{ hover: false }" @mouseover="hover = true" @mouseleave="hover = false" class="position-relative col-sm-12 col-md-6 col-lg-4 col-xl-2 p-1">
+                        <img  style="max-width: 100%" x-bind:src="'https://s3.eu-central-1.amazonaws.com/image-storage.dev.bucket/' + image.thumbnail_path" />
+                        <div x-show="hover" class="position-absolute image-popover">
+                            <h3 class="position-absolute text-white" style="top: 8px; left: 16px"></h3>
+                        </div>   
+                    </div>
+                </template>
             </div>
         </div>
+        {{ images|json_script:'images' }}
     </div>
+
     <div class="row py-2">
         <div id="upload-tile" class="card col-md-12 col-lg-6"> 
             <div class="card-body">
@@ -49,9 +54,9 @@
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="image" role="tabpanel" aria-labelledby="image-tab"> 
-                    {% render_table table %}
-                </div>
+                {% with dataset.id as pk %}
+                    {% include 'transactions/transactions.html' %}
+                {% endwith %}
                 <div class="tab-pane fade" id="annotation" role="tabpanel" aria-labelledby="annotation-tab"> Annotations Transaktionen </div>
             </div>
         </div>
