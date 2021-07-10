@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'dashboard',
     'datasets',
     'images',
-    'transactions',
 ]
 
 MIDDLEWARE = [

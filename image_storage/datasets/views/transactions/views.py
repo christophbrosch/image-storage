@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView
 
-from .models import ImageTransaction
+from ...models import ImageTransaction
 # Create your views here.
 
 class DeleteView(DeleteView):

@@ -24,5 +24,4 @@ urlpatterns = [
     path('datasets/', include('datasets.urls')),
     path('images/', include('images.urls')),
     path('api/images/', include('images.api.urls')),
-    path('transactions/', include('transactions.urls')),
 ]

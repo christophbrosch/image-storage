@@ -1,7 +1,4 @@
-from itertools import tee
 import math
-from django.http.response import HttpResponse
-from django.template.context import Context
 
 from django.urls import reverse, reverse_lazy
 from django.db.models.query import QuerySet
@@ -10,17 +7,14 @@ from django.views.generic import View, FormView, ListView, DetailView, CreateVie
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib import messages
 from django.shortcuts import render
-from django.template import Template
 
 from django_tables2.views import SingleTableMixin
 from images.models import Image
 from images.api.serializers import ImageSerializer
 
-from transactions.models import ImageTransaction, Transaction
-from transactions.tables import ImageTransactionTable
-
-from .models import Dataset
-from .forms import ImageUploadForm
+from ..models import Dataset, ImageTransaction
+from ..forms import ImageUploadForm
+from ..tables import ImageTransactionTable
 
 class ListView(LoginRequiredMixin, ListView):
     model = Dataset
@@ -55,18 +49,11 @@ class DatasetDetailView(LoginRequiredMixin, SingleTableMixin, DetailView):
         context['form'] = ImageUploadForm()
         context['images'] = ImageSerializer(Image.objects.filter(dataset__id=self.kwargs['pk']), many=True).data
         context['pages'] = range(1, max(1, int(math.ceil(len(ImageTransaction.objects.all()) / 3))) + 1)
+        context['current_page'] = 1
         return context
     
     def get_table_data(self):
         return ImageTransaction.objects.filter(dataset__id=self.kwargs['pk'])[:3]
-
-
-def transactions_table(request, pk, page):
-    table_class = ImageTransactionTable
-    page = page - 1
-    table_data = ImageTransaction.objects.filter(dataset__id=pk)[page * 3: page * 3 + 3]
-    table = table_class(table_data)
-    return render(request, 'transactions/transactions.html', context={'pk': pk, 'table': table, 'pages': range(1, max(1, int(math.ceil(len(ImageTransaction.objects.all()) / 3))) + 1)})
 
 class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
     template_name = 'datasets/detail.html'

@@ -62,7 +62,6 @@ class FilterableDatasetList extends React.Component {
                             })}
                         </Form.Control>
                     </InputGroup>
-                        
                 </div>
                 <div className="row mt-4">
                     { this.state.datasets

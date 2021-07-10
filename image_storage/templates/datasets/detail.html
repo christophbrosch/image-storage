@@ -28,7 +28,6 @@
         </div>
         {{ images|json_script:'images' }}
     </div>
-
     <div class="row py-2">
         <div id="upload-tile" class="card col-md-12 col-lg-6"> 
             <div class="card-body">
@@ -53,11 +52,14 @@
                         <button class="nav-link" id="annotation-tab" data-bs-toggle="tab" data-bs-target="#annotation" type="button" role="tab" aria-controls="annotation" aria-selected="false">Annotation</button>
                     </li>
                 </ul>
-                <div class="tab-content" id="myTabContent">
-                {% with dataset.id as pk %}
-                    {% include 'transactions/transactions.html' %}
-                {% endwith %}
-                <div class="tab-pane fade" id="annotation" role="tabpanel" aria-labelledby="annotation-tab"> Annotations Transaktionen </div>
+                <div class="tab-content">
+                    {% with dataset.id as pk %}
+                        {% include 'transactions/htmx/table.html' %}
+                    {% endwith %}
+                    <div class="tab-pane fade" id="annotation" role="tabpanel" aria-labelledby="annotation-tab"> 
+                    Annotations Transaktionen 
+                    </div>
+                </div>
             </div>
         </div>
     </div>

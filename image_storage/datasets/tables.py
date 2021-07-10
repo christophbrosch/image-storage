@@ -5,7 +5,7 @@ class ImageTransactionTable(tables.Table):
     actions = tables.TemplateColumn(
         template_code="""
                         <div class="d-flex justify-content-around">
-                            <a class="btn btn-danger" href="{% url \'transactions:delete\' record.id %}"> Löschen </a>
+                            <a class="btn btn-danger" href="{% url \'datasets:transactions-delete\' record.id %}"> Löschen </a>
                         </div>
                         """,
         orderable = False
