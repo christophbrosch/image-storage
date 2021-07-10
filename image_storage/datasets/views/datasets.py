@@ -1,4 +1,5 @@
 import math
+import traceback
 
 from django.urls import reverse, reverse_lazy
 from django.db.models.query import QuerySet
@@ -9,11 +10,9 @@ from django.contrib import messages
 from django.shortcuts import render
 
 from django_tables2.views import SingleTableMixin
-from images.models import Image
-from images.api.serializers import ImageSerializer
 
-from ..models import Dataset, ImageTransaction
-from ..forms import ImageUploadForm
+from ..models import Dataset, Image, Annotation, ImageTransaction, AnnotationTransaction
+from ..forms import ImageUploadForm, AnnotationUploadForm
 from ..tables import ImageTransactionTable
 
 class ListView(LoginRequiredMixin, ListView):
@@ -46,8 +45,9 @@ class DatasetDetailView(LoginRequiredMixin, SingleTableMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = ImageUploadForm()
-        context['images'] = ImageSerializer(Image.objects.filter(dataset__id=self.kwargs['pk']), many=True).data
+        context['image_upload_form'] = ImageUploadForm()
+        context['annotation_upload_form'] = AnnotationUploadForm()
+        context['images'] = Image.objects.filter(dataset__id=self.kwargs['pk'])[:6]
         context['pages'] = range(1, max(1, int(math.ceil(len(ImageTransaction.objects.all()) / 3))) + 1)
         context['current_page'] = 1
         return context
@@ -85,12 +85,60 @@ class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
                         else:
                             transaction.images.add(image)
                             messages.add_message(request, messages.INFO, file.name + ' erfolgreich hochgeladen.')
-
-                    transaction.save()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
+    def get_success_url(self) -> str:
+        return reverse('datasets:detail', kwargs={'pk': self.object.pk})
+
+class AnnotationUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
+    template_name = 'datasets/detail.html'
+    form_class = AnnotationUploadForm
+    model = Dataset
+
+    def post(self, request, pk, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        files = request.FILES.getlist('file_field')
+
+        if form.is_valid():
+            dataset = Dataset.objects.get(pk = pk)
+            
+            # TODO: Check if file ending corresponds to what the dataset.annotation_file_format requires
+            mapping = {'pascal_voc': 'xml', 'yolo': 'txt', 'coco': 'json'} # Everything beside pascal_voc is a lie
+            expected_file_extension = mapping[dataset.annotation_file_format]
+            try:
+                transaction = AnnotationTransaction.objects.create(dataset=dataset)
+            except:
+                traceback.print_exc()
+            else:
+                for file in files:
+                    if file.name.split('.')[-1] != expected_file_extension:
+                        continue
+                    else:
+                        print(''.join(file.name.split('.')[0:-1]))
+                        try:
+                            image = Image.objects.get(name=''.join(file.name.split('.')[0:-1]))
+                        except Image.DoesNotExist:
+                            traceback.print_exc()
+                            messages.add_message(request, messages.WARNING, file.name + ' fehler beim upload aufgetreten.')
+                        else:
+                            try:
+                                annotation = Annotation.objects.create(file = file, image = image, format = 'pascal_voc')
+                            except:
+                                traceback.print_exc()
+                                messages.add_message(request, messages.WARNING, file.name + ' fehler beim upload aufgetreten.')  
+                            else:
+                                transaction.annotations.add(annotation)
+                                messages.add_message(request, messages.INFO, file.name + ' erfolgreich hochgeladen.')
+
+
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+    
     def get_success_url(self) -> str:
         return reverse('datasets:detail', kwargs={'pk': self.object.pk})
 
@@ -101,13 +149,16 @@ class DetailView(View):
         return view(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        view = ImageUploadFormView.as_view()
+        if request.POST['form'] == 'image_upload_form':
+            view = ImageUploadFormView.as_view()
+        elif request.POST['form'] == 'annotation_upload_form':
+            view = AnnotationUploadFormView.as_view()
         return view(request, *args, **kwargs)
 
 # Create your views here.
 class CreateView(LoginRequiredMixin, CreateView):
     model = Dataset
-    fields = ['name', 'description']
+    fields = ['name', 'description', 'annotation_file_format', 'labels']
     template_name = 'datasets/create.html'
 
     def get_success_url(self) -> str:

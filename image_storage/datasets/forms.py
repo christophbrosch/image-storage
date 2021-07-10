@@ -5,3 +5,6 @@ from .models import Dataset
 
 class ImageUploadForm(forms.Form):
     file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
+class AnnotationUploadForm(forms.Form):
+    file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))

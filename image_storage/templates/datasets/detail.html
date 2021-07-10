@@ -3,8 +3,6 @@
 {% load django_bootstrap5 %}
 {% load django_tables2 %}
 
-{% load render_image %}
-
 {% block css %} 
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'datasets-detail.css' %}">
@@ -12,51 +10,65 @@
 
 {% block content %}
     <br></br>
-    <div x-data="{ images: JSON.parse(document.querySelector('#images').text), detail_url: '123' };">
-        <div class="card">
-           <h3 class="card-header"> Bilder </h3>
-           <div class="card-body row">    
-                <template x-for="image in images">
-                    <div x-data="{ hover: false }" @mouseover="hover = true" @mouseleave="hover = false" class="position-relative col-sm-12 col-md-6 col-lg-4 col-xl-2 p-1">
-                        <img  style="max-width: 100%" x-bind:src="'https://s3.eu-central-1.amazonaws.com/image-storage.dev.bucket/' + image.thumbnail_path" />
-                        <div x-show="hover" class="position-absolute image-popover">
-                            <h3 class="position-absolute text-white" style="top: 8px; left: 16px"></h3>
-                        </div>   
-                    </div>
-                </template>
-            </div>
-        </div>
-        {{ images|json_script:'images' }}
+    <div class="row">
+        {% with dataset.id as pk %}
+            {% include 'images/htmx/bar.html' with expand=True %}
+        {% endwith %}
     </div>
     <div class="row py-2">
-        <div id="upload-tile" class="card col-md-12 col-lg-6"> 
+        <div id="image-upload-tile" class="card col-md-12 col-lg-6"> 
             <div class="card-body">
-                <h5 class="card-header"> Bilder hinzufügen </h5>
-                <label for="formFileMultiple" class="form-label card-text py-2"> Wähle mehrere Bilder aus die du hochladen möchtest </label>
-                <form enctype="multipart/form-data" class="form-group" action="" method="post">
-                    {% csrf_token %}
-                    {% bootstrap_form form %}
-                    {% bootstrap_button type="reset" content="Zurücksetzen" %}
-                    {% bootstrap_button type="submit" content="Hochladen" %}
-                </form>
-            </div>
-        </div>
-        <div id="upload-tile" class="card col-md-12 col-lg-6"> 
-            <div class="card-body">
-                <h5 class="card-header"> Transaktionen </h5>
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <h5 class="card-header"> Dateien hinzufügen </h5>
+
+                <ul class="nav nav-tabs" id="upload-tab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="image-tab" data-bs-toggle="tab" data-bs-target="#image" type="button" role="tab" aria-controls="image" aria-selected="true">Bild</button>
+                        <button class="nav-link active" id="image-upload-tab" data-bs-toggle="tab" data-bs-target="#image-upload" type="button" role="tab" aria-controls="image-upload" aria-selected="true">Bild</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="annotation-tab" data-bs-toggle="tab" data-bs-target="#annotation" type="button" role="tab" aria-controls="annotation" aria-selected="false">Annotation</button>
+                        <button class="nav-link" id="annotation-upload-tab" data-bs-toggle="tab" data-bs-target="#annotation-upload" type="button" role="tab" aria-controls="annotation-upload" aria-selected="false">Annotation</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="image-upload" role="tabpanel" aria-labelledby="image-upload-tab"> 
+                        <label for="formFileMultiple" class="form-label card-text py-2"> Wähle mehrere Bilder aus die du hochladen möchtest </label>
+                        <form enctype="multipart/form-data" class="form-group" action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="form" value="image_upload_form">
+                            {% bootstrap_form image_upload_form %}
+                            {% bootstrap_button type="reset" content="Zurücksetzen" %}
+                            {% bootstrap_button type="submit" content="Hochladen" %}
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="annotation-upload" role="tabpanel" aria-labelledby="annotation-upload-tab"> 
+                        <label for="formFileMultiple" class="form-label card-text py-2"> Wähle mehrere Annotationsdateien aus die du hochladen möchtest </label>
+                        <form enctype="multipart/form-data" class="form-group" action="" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="form" value="annotation_upload_form">
+                            {% bootstrap_form annotation_upload_form %}
+                            {% bootstrap_button type="reset" content="Zurücksetzen" %}
+                            {% bootstrap_button type="submit" content="Hochladen" %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card col-md-12 col-lg-6"> 
+            <div class="card-body">
+                <h5 class="card-header"> Transaktionen </h5>
+                <ul class="nav nav-tabs" id="transaction-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="image-transaction-tab" data-bs-toggle="tab" data-bs-target="#image-transaction" type="button" role="tab" aria-controls="image-transaction" aria-selected="true">Bild</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="annotation-transaction-tab" data-bs-toggle="tab" data-bs-target="#annotation-transaction" type="button" role="tab" aria-controls="annotation-transaction" aria-selected="false">Annotation</button>
                     </li>
                 </ul>
                 <div class="tab-content">
                     {% with dataset.id as pk %}
                         {% include 'transactions/htmx/table.html' %}
                     {% endwith %}
-                    <div class="tab-pane fade" id="annotation" role="tabpanel" aria-labelledby="annotation-tab"> 
+                    <div class="tab-pane fade" id="annotation-transaction" role="tabpanel" aria-labelledby="annotation-transaction-tab"> 
                     Annotations Transaktionen 
                     </div>
                 </div>

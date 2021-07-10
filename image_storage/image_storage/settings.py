@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'users',
     'dashboard',
     'datasets',
-    'images',
 ]
 
 MIDDLEWARE = [
@@ -87,8 +86,12 @@ WSGI_APPLICATION = 'image_storage.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'POST': '5432'
     }
 }
 
