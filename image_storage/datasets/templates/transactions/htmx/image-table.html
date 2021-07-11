@@ -1,0 +1,18 @@
+{% load django_tables2 %}
+<div id="image-transaction" class="tab-pane fade show active" role="tabpanel" aria-labelledby="image-transaction-tab">  
+    {% render_table tables|first %}
+
+    <ul class="pagination justify-content-center">
+    {% if current_page_table_1 != pages_table_1|first  %}
+        <li class="page-item"><a class="page-link" hx-get="{% url 'datasets:image-transactions-pagination' pk current_page|add:"-1" %}" hx-target="#image-transaction" hx-swap="outerHTML"> previous </a> </li>
+    {% endif %}
+
+    {% for page in pages_table_1 %}
+        <li class="page-item"><a class="page-link" hx-get="{% url 'datasets:image-transactions-pagination' pk page %}" hx-target="#image-transaction" hx-swap="outerHTML"> {{ page }} </a> </li>
+    {% endfor %}
+
+    {% if current_page_table_1 != pages_table_1|last %}
+        <li class="page-item"><a class="page-link" hx-get="{% url 'datasets:image-transactions-pagination' pk current_page|add:"1" %}" hx-target="#image-transaction" hx-swap="outerHTML"> next </a> </li>
+    {% endif %}
+    </ul>
+</div>

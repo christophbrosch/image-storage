@@ -9,11 +9,11 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib import messages
 from django.shortcuts import render
 
-from django_tables2.views import SingleTableMixin
+from django_tables2.views import MultiTableMixin, SingleTableMixin
 
 from ..models import Dataset, Image, Annotation, ImageTransaction, AnnotationTransaction
 from ..forms import ImageUploadForm, AnnotationUploadForm
-from ..tables import ImageTransactionTable
+from ..tables import ImageTransactionTable, AnnotationTransactionTable
 
 class ListView(LoginRequiredMixin, ListView):
     model = Dataset
@@ -38,22 +38,30 @@ class ListView(LoginRequiredMixin, ListView):
 
         return context
 
-class DatasetDetailView(LoginRequiredMixin, SingleTableMixin, DetailView):
+class DatasetDetailView(LoginRequiredMixin, MultiTableMixin, DetailView):
     template_name = 'datasets/detail.html'
     model = Dataset
-    table_class = ImageTransactionTable
+    tables = [
+        ImageTransactionTable,
+        AnnotationTransactionTable
+    ]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['image_upload_form'] = ImageUploadForm()
         context['annotation_upload_form'] = AnnotationUploadForm()
         context['images'] = Image.objects.filter(dataset__id=self.kwargs['pk'])[:6]
-        context['pages'] = range(1, max(1, int(math.ceil(len(ImageTransaction.objects.all()) / 3))) + 1)
-        context['current_page'] = 1
+        context['pages_table_1'] = range(1, max(1, int(math.ceil(len(ImageTransaction.objects.all()) / 3))) + 1)
+        context['current_page_table_1'] = 1
+        context['pages_table_2'] = range(1, max(1, int(math.ceil(len(AnnotationTransaction.objects.all()) / 3))) + 1)
+        context['current_page_table_2'] = 1
         return context
     
-    def get_table_data(self):
-        return ImageTransaction.objects.filter(dataset__id=self.kwargs['pk'])[:3]
+    def get_tables_data(self):
+        return (
+            ImageTransaction.objects.filter(dataset__id=self.kwargs['pk'])[:3],
+            AnnotationTransaction.objects.filter(dataset__id=self.kwargs['pk'])[:3]
+        )
 
 class ImageUploadFormView(LoginRequiredMixin, SingleObjectMixin, FormView):
     template_name = 'datasets/detail.html'

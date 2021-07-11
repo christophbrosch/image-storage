@@ -1,0 +1,18 @@
+{% load django_tables2 %}
+<div id="annotation-transaction" class="tab-pane fade" role="tabpanel" aria-labelledby="annotation-transaction-tab">  
+    {% render_table tables|last %}
+
+    <ul class="pagination justify-content-center">
+    {% if current_page_table_2 != pages_table_2|first  %}
+        <li class="page-item"><a class="page-link" hx-get="{% url 'datasets:annotation-transactions-pagination' pk current_page|add:"-1" %}" hx-target="#annotation-transaction" hx-swap="outerHTML"> previous </a> </li>
+    {% endif %}
+
+    {% for page in pages_table_2 %}
+        <li class="page-item"> <a class="page-link" hx-get="{% url 'datasets:annotation-transactions-pagination' pk page %}" hx-target="#annotation-transaction" hx-swap="outerHTML"> {{ page }} </a> </li>
+    {% endfor %}
+
+    {% if current_page_table_2 != pages_table_2|last %}
+        <li class="page-item"><a class="page-link" hx-get="{% url 'datasets:annotation-transactions-pagination' pk current_page|add:"1" %}" hx-target="#annotation-transaction" hx-swap="outerHTML"> next </a> </li>
+    {% endif %}
+    </ul>
+</div>

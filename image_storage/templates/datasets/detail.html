@@ -66,11 +66,9 @@
                 </ul>
                 <div class="tab-content">
                     {% with dataset.id as pk %}
-                        {% include 'transactions/htmx/table.html' %}
+                        {% include 'transactions/htmx/image-table.html' %}
+                        {% include 'transactions/htmx/annotation-table.html' %}
                     {% endwith %}
-                    <div class="tab-pane fade" id="annotation-transaction" role="tabpanel" aria-labelledby="annotation-transaction-tab"> 
-                    Annotations Transaktionen 
-                    </div>
                 </div>
             </div>
         </div>

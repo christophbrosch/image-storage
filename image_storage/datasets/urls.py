@@ -20,9 +20,11 @@ urlpatterns = [
     path('<int:pk>/collapse/', views.images.htmx.collapse, name='images-collapse'),
 
     # transactions
-    path('<int:pk>/transactions/<int:transaction_id>/delete/', views.transactions.DeleteView.as_view(), name='transactions-delete'),
+    path('<int:pk>/images/transactions/<int:transaction_id>/delete/', views.transactions.ImageTransactionDeleteView.as_view(), name='image-transactions-delete'),
+    path('<int:pk>/annotations/transactions/<int:transaction_id>/delete/', views.transactions.AnnotationTransactionDeleteView.as_view(), name='annotation-transactions-delete'),
+
 
     # htmx
-    path('<int:pk>/transactions/<int:page>/', views.transactions.htmx.table_pagination, name='transactions-pagination'),
-
+    path('<int:pk>/transactions/<int:page>/', views.transactions.htmx.image_table_pagination, name='image-transactions-pagination'),
+    path('<int:pk>/transactions/<int:page>/', views.transactions.htmx.annotation_table_pagination, name='annotation-transactions-pagination'),
 ]
